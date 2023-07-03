@@ -1,10 +1,11 @@
 #!/bin/bash
 
-VERSION="v3.3.0"
+VERSION="v3.3.1"
 #===============================================================================
 # title           setup-new-computer.sh
 # author          Joel Kesler 
 #                 https://github.com/joelkesler
+# modifier        Tom Anderson
 #===============================================================================
 #   A shell script to help with the quick setup and installation of tools and 
 #   applications for new developers at Vendasta.
@@ -139,7 +140,7 @@ fi
     source "\$(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.bash.inc"
 
 # Golang
-export GOPRIVATE="github.com/vendasta"
+# export GOPRIVATE="github.com/vendasta"
 export GOPROXY="direct"
 export GO111MODULE="on"
 export GOPATH=\$HOME/go
@@ -210,7 +211,7 @@ fpath=(/usr/local/share/zsh-completions \$fpath)
     source "\$(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"
 
 # Golang
-export GOPRIVATE="github.com/vendasta"
+# export GOPRIVATE="github.com/vendasta"
 export GOPROXY="direct"
 export GO111MODULE="on"
 export GOPATH=\$HOME/go
@@ -487,22 +488,24 @@ printHeading "Installing Node and Angular CLI through NVM"
     printDivider
         echo "Installing Node..."
         nvm install 18
-    printStep "Angular CLI"             "npm install --location=global @angular/cli"
-    printStep "NX"                      "npm install --location=global nx"
-    printStep "Husky"                   "npm install --location=global husky"
-    printStep "Node Sass"               "npm install --location=global node-sass"
-    printStep "Node Gyp"                "npm install --location=global node-gyp"
-    printDivider
-        echo "✔ Touch ~/.huskyrc"
-            touch ~/.huskyrc
-    printDivider
-        # Husky profile
-        if grep --quiet "nvm" ~/.huskyrc; then
-            echo "✔ .huskyrc already includes nvm. Skipping"
-        else
-            writetoHuskrc
-            echo "✔ Add nvm to .huskyrc"
-        fi
+
+    # TODO: add what we do need    
+    # printStep "Angular CLI"             "npm install --location=global @angular/cli"
+    # printStep "NX"                      "npm install --location=global nx"
+    # printStep "Husky"                   "npm install --location=global husky"
+    # printStep "Node Sass"               "npm install --location=global node-sass"
+    # printStep "Node Gyp"                "npm install --location=global node-gyp"
+    # printDivider
+    #     echo "✔ Touch ~/.huskyrc"
+    #         touch ~/.huskyrc
+    # printDivider
+    #     # Husky profile
+    #     if grep --quiet "nvm" ~/.huskyrc; then
+    #         echo "✔ .huskyrc already includes nvm. Skipping"
+    #     else
+    #         writetoHuskrc
+    #         echo "✔ Add nvm to .huskyrc"
+    #     fi
 printDivider
 
 
@@ -521,27 +524,24 @@ printHeading "Install Google Cloud SDK and Components"
             ln -s "$(brew --prefix)/Caskroom/google-cloud-sdk" ~/google-cloud-sdk &>/dev/null
             # make a convenience symlink at the install path for google-cloud-sdk when installed manually
         fi
-    printStep "App Engine - Go"             "gcloud components install app-engine-go --quiet"
-    printStep "App Engine - Python"         "gcloud components install app-engine-python --quiet"
-    printStep "App Engine - Python Extras"  "gcloud components install app-engine-python-extras --quiet"
     printStep "Kubectl"                     "gcloud components install kubectl --quiet"
-    printStep "Docker Credentials"          "gcloud components install docker-credential-gcr --quiet"
+    printStep "gke-gcloud-auth-plugin"      "gcloud components install gke-gcloud-auth-plugin --quiet"
 printDivider
 
 
 # Install System Tweaks
 printHeading "System Tweaks"
-    printDivider
-    echo "✔ General: Expand save and print panel by default"
-        defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
-        defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
-        defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
-        defaults write NSGlobalDomain PMPrintingExpandedStateForPrint2 -bool true
-    echo "✔ General: Save to disk (not to iCloud) by default"
-        defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
-    echo "✔ General: Avoid creating .DS_Store files on network volumes"
-        defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
-    printDivider
+    # printDivider
+    # echo "✔ General: Expand save and print panel by default"
+    #     defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
+    #     defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
+    #     defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
+    #     defaults write NSGlobalDomain PMPrintingExpandedStateForPrint2 -bool true
+    # echo "✔ General: Save to disk (not to iCloud) by default"
+    #     defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
+    # echo "✔ General: Avoid creating .DS_Store files on network volumes"
+    #     defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+    # printDivider
         
     echo "✔ Typing: Disable smart quotes and dashes as they cause problems when typing code"
         defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
@@ -577,16 +577,16 @@ printHeading "System Tweaks"
     # defaults delete com.google.Chrome
     # defaults delete com.google.Chrome.canary
     #
-    echo "✔ Chrome: Disable the all too sensitive backswipe on Trackpads and Magic Mice"
-        defaults write com.google.Chrome AppleEnableSwipeNavigateWithScrolls -bool false
-        defaults write com.google.Chrome.canary AppleEnableSwipeNavigateWithScrolls -bool false
-        defaults write com.google.Chrome AppleEnableMouseSwipeNavigateWithScrolls -bool false
-        defaults write com.google.Chrome.canary AppleEnableMouseSwipeNavigateWithScrolls -bool false
-    echo "✔ Chrome: Use the system print dialog and expand dialog by default"
-        defaults write com.google.Chrome DisablePrintPreview -bool true
-        defaults write com.google.Chrome.canary DisablePrintPreview -bool true
-        defaults write com.google.Chrome PMPrintingExpandedStateForPrint2 -bool true
-        defaults write com.google.Chrome.canary PMPrintingExpandedStateForPrint2 -bool true
+    # echo "✔ Chrome: Disable the all too sensitive backswipe on Trackpads and Magic Mice"
+    #     defaults write com.google.Chrome AppleEnableSwipeNavigateWithScrolls -bool false
+    #     defaults write com.google.Chrome.canary AppleEnableSwipeNavigateWithScrolls -bool false
+    #     defaults write com.google.Chrome AppleEnableMouseSwipeNavigateWithScrolls -bool false
+    #     defaults write com.google.Chrome.canary AppleEnableMouseSwipeNavigateWithScrolls -bool false
+    # echo "✔ Chrome: Use the system print dialog and expand dialog by default"
+    #     defaults write com.google.Chrome DisablePrintPreview -bool true
+    #     defaults write com.google.Chrome.canary DisablePrintPreview -bool true
+    #     defaults write com.google.Chrome PMPrintingExpandedStateForPrint2 -bool true
+    #     defaults write com.google.Chrome.canary PMPrintingExpandedStateForPrint2 -bool true
 printDivider
 
 
@@ -600,7 +600,7 @@ printDivider
 printHeading "Set Up Git"
 
 printDivider
-    echo "✔ Set Git to store credentials in Keychain"
+    echo "✔ Set Git to store credentials in Keychain (for BitBucket)"
     git config --global credential.helper osxkeychain
 printDivider
     if [ -n "$(git config --global user.email)" ]; then
@@ -613,19 +613,19 @@ printDivider
     if [ -n "$(git config --global user.name)" ]; then
         echo "✔ Git display name is set to $(git config --global user.name)"
     else
-        read -p 'What is your Git display name (Firstname Lastname)?: ' gitName
+        read -p 'What is your Git display name (Firstname Lastname) for BitBucket?: ' gitName
         git config --global user.name "$gitName"
     fi
-printDivider
-    echo "✔ Configure git to always ssh when dealing with https github repos"
-        git config --global url."git@github.com:".insteadOf https://github.com/
-        # you can remove this change by editing your ~/.gitconfig file
+# printDivider
+#     echo "✔ Configure git to always ssh when dealing with https github repos"
+#         git config --global url."git@github.com:".insteadOf https://github.com/
+#         # you can remove this change by editing your ~/.gitconfig file
 printDivider
     echo "✔ Creating .ssh directory in home folder [~/.ssh]"
         mkdir -p ~/go
 printDivider
-    echo "✔ Adding github.com to known_hosts file [~/.ssh/known_hosts]"
-        ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+    echo "✔ Adding Bitbucket.com to known_hosts file [~/.ssh/known_hosts]"
+        ssh-keygen -R bitbucket.org && curl https://bitbucket.org/site/ssh >> ~/.ssh/known_hosts
 printDivider
 
 
